@@ -1,6 +1,6 @@
-// Signup.js
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";  // ✅ correct import
 import "./Signup.css";
 
 const Signup = () => {
@@ -10,8 +10,9 @@ const Signup = () => {
     password: "",
   });
 
-  const [message, setMessage] = useState(""); // success or error message
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // ✅ create navigate function
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,11 +27,20 @@ const Signup = () => {
       const res = await axios.post("http://localhost:5000/api/auth/signup", formData);
 
       setMessage(res.data.message || "Signup successful!");
-      setFormData({ name: "", email: "", password: "" }); // clear form
-    } catch (error) {
-      setMessage(
-        error.response?.data?.message || "Something went wrong. Try again."
-      );
+      console.log("Signup Success:", res.data);
+
+      // ✅ navigate after success
+      navigate("/home");
+
+      // clear form
+      setFormData({ name: "", email: "", password: "" });
+    } catch (err) {
+      if (err.response) {
+        setMessage(err.response.data.message || "Signup failed");
+      } else {
+        setMessage("Server not responding");
+      }
+      console.error("Signup error:", err);
     }
 
     setLoading(false);
@@ -75,7 +85,7 @@ const Signup = () => {
         {message && <p className="message">{message}</p>}
 
         <p className="login-text">
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <a href="/">Login</a>
         </p>
       </form>
     </div>

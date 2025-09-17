@@ -1,6 +1,7 @@
 // Login.js
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate as Navigate } from "react-router-dom";
 import "./Login.css"; // Import styles
 
 const Login = () => {
@@ -28,6 +29,7 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
 
       setMessage("Login successful!");
+      Navigate("/home");
       setCredentials({ email: "", password: "" });
 
       // Optionally redirect (React Router)

@@ -2,7 +2,6 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
 const router = express.Router();
 
 // SIGNUP
@@ -22,7 +21,7 @@ router.post("/signup", async (req, res) => {
     // Save user
     const newUser = new User({
       name,
-      email,
+      email: email.trim().toLowerCase(),
       password: hashedPassword,
     });
     await newUser.save();
@@ -40,26 +39,36 @@ router.post("/signup", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
+    // normalize email
+    const emailNorm = email.trim().toLowerCase();
+    const user = await User.findOne({ email: emailNorm });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-    // Find user
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
-
-    // Check password
+    // compare hashed password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-    // Create token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "1h",
     });
 
-    res.json({ message: "Login successful", token });
+    res.json({
+      message: "Login successful",
+      token,
+      user: { id: user._id, name: user.name, email: user.email },
+    });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;
