@@ -23,7 +23,7 @@ const Login = () => {
     setMessage("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", credentials);
+      const res = await axios.post("", credentials);
 
       // Save token to localStorage
       localStorage.setItem("token", res.data.token);
@@ -33,7 +33,7 @@ const Login = () => {
       setCredentials({ email: "", password: "" });
 
       // Optionally redirect (React Router)
-      // window.location.href = "/home";
+      
     } catch (error) {
       setMessage(error.response?.data?.message || "Invalid credentials. Try again.");
     }

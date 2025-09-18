@@ -14,17 +14,41 @@ from .serializers import ProductSerializer, UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework_simplejwt.tokens import RefreshToken
+
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]  # registration allowed; restrict list in production
+    permission_classes = [permissions.AllowAny]  # allow anyone to register
 
     def get_permissions(self):
         # Allow anyone to create (register). Only admin can list/delete in production.
         if self.action in ["create"]:
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        # ✅ Generate tokens for auto-login
+        refresh = RefreshToken.for_user(user)
+        access = refresh.access_token
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            {
+                "message": "Signup successful!",
+                "user": serializer.data,
+                "refresh": str(refresh),
+                "access": str(access),
+            },
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.filter(is_active=True)

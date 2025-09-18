@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,6 +59,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ecommerce_api.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -78,11 +80,18 @@ WSGI_APPLICATION = 'ecommerce_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'ecommerce_db',  # you can rename this to your preferred DB name
+        'CLIENT': {
+            'host': config(
+                'MONGO_URI',
+                default="mongodb+srv://<username>:<password>@cluster0.mongodb.net/ecommerce_db?retryWrites=true&w=majority"
+            ),
+            'username': config('MONGO_USER', default="<username>"),
+            'password': config('MONGO_PASS', default="<password>"),
+        }
     }
 }
 

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";  // ✅ correct import
 import "./Signup.css";
+import API from "../api";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const Signup = () => {
     setMessage("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", formData);
+      const res = await API.post("users/", formData);
 
       setMessage(res.data.message || "Signup successful!");
       console.log("Signup Success:", res.data);
