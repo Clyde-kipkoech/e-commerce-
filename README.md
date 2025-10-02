@@ -19,9 +19,7 @@ It allows users to register/login, browse products, and admins to manage product
 -  Deployment-ready (Heroku, Netlify, Vercel)
 
 ---
-
-##  Project Structure
-
+ ### Projec structure 
 ecommerce-project/
 │
 ├── ecommerce_api/ # Django backend
@@ -58,8 +56,7 @@ ecommerce-project/
 ├── .gitignore
 └── README.md
 
-yaml
-Copy code
+
 
 ---
 
