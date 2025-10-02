@@ -2,7 +2,8 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";  // ✅ correct import
 import "./Signup.css";
-import API from "../api";
+import axios from "axios";
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -19,33 +20,31 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+ 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setMessage("");
 
-    try {
-      const res = await API.post("users/", formData);
+  try {
+    await axios.post("http://127.0.0.1:8000/api/users/", {
+      email: formData.email,
+      password: formData.password,
+      first_name: formData.name || formData.email,
+    });
 
-      setMessage(res.data.message || "Signup successful!");
-      console.log("Signup Success:", res.data);
+    setMessage("Signup successful! Please log in.");
+    navigate("/"); // redirect to login page
+    setFormData({ name: "", email: "", password: "" });
+  } catch (err) {
+    setMessage(err.response?.data?.message || "Signup failed");
+    console.error("Signup error:", err);
+  }
 
-      // ✅ navigate after success
-      navigate("/home");
+  setLoading(false);
+};
 
-      // clear form
-      setFormData({ name: "", email: "", password: "" });
-    } catch (err) {
-      if (err.response) {
-        setMessage(err.response.data.message || "Signup failed");
-      } else {
-        setMessage("Server not responding");
-      }
-      console.error("Signup error:", err);
-    }
 
-    setLoading(false);
-  };
 
   return (
     <div className="signup-container">

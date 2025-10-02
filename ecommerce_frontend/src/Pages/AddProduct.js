@@ -1,20 +1,27 @@
-// src/pages/AddProduct.js
-import React, { useState } from "react";
+
+import  { useState } from "react";
 import API from "../api";
 
 function AddProduct() {
-  const [form, setForm] = useState({
-    name: "",
-    slug: "",
-    description: "",
-    price: "",
-    stock: "",
-    category: "other",
-  });
+ const [form, setForm] = useState({
+  name: "",
+  slug: "",
+  description: "",
+  price: "",
+  stock: "",
+  category: "other",
+  image: null,  
+});
+
 
   const handleChange = (e) => {
+  if (e.target.name === "image") {
+    setForm({ ...form, image: e.target.files[0] }); // store file object
+  } else {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  }
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +30,7 @@ function AddProduct() {
       alert("Product added!");
     } catch (err) {
       console.error(err);
-      alert("Error adding product. Check console.");
+      alert("Error adding product.");
     }
   };
 
@@ -43,6 +50,14 @@ function AddProduct() {
           <option value="books">Books</option>
           <option value="other">Other</option>
         </select>
+        <input 
+  type="file" 
+  name="image" 
+  accept="image/*" 
+  onChange={handleChange} 
+/>
+
+
         <button type="submit">Add Product</button>
       </form>
     </div>

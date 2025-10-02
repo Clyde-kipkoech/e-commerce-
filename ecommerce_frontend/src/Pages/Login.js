@@ -1,7 +1,8 @@
 // Login.js
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate as Navigate } from "react-router-dom";
+
 import "./Login.css"; // Import styles
 
 const Login = () => {
@@ -12,38 +13,48 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); 
+
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setMessage("");
 
-    try {
-      const res = await axios.post("", credentials);
+  try {
+    const res = await axios.post("http://127.0.0.1:8000/api/login/", {
+  email: credentials.email,
+  password: credentials.password,
+});
 
-      // Save token to localStorage
-      localStorage.setItem("token", res.data.token);
+localStorage.setItem("access", res.data.access);
+localStorage.setItem("refresh", res.data.refresh);
+localStorage.setItem("user", JSON.stringify(res.data.user)); // 👈 save user info
 
-      setMessage("Login successful!");
-      Navigate("/home");
-      setCredentials({ email: "", password: "" });
+setMessage("Login successful!");
 
-      // Optionally redirect (React Router)
-      
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Invalid credentials. Try again.");
-    }
+// redirect admin to dashboard, normal users to home
+if (res.data.user.is_staff) {
+  navigate("/add-product");
+} else {
+  navigate("/home");
+}
 
-    setLoading(false);
-  };
+  } catch (error) {
+    setMessage(error.response?.data?.non_field_errors?.[0] || "Invalid credentials");
+    console.error(error);
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleLogin}>
         <h2>Welcome Back</h2>
 
         <input
