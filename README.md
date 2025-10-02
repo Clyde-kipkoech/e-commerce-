@@ -1,4 +1,4 @@
-# 🛒 Full-Stack E-Commerce Platform
+#  Full-Stack E-Commerce Platform
 
 This project is a **full-stack e-commerce application** built with:
 
@@ -9,18 +9,18 @@ It allows users to register/login, browse products, and admins to manage product
 
 ---
 
-## 🚀 Features
-- 🔑 User authentication & token-based login
-- 👤 Role-based access (Admin vs. User)
-- 🛍️ Product management (CRUD)
-- 🔎 Search, filter & paginate products
-- 👨‍💻 Admin-only user management
-- ⚡ Error handling & validation
-- ☁️ Deployment-ready (Heroku, Netlify, Vercel)
+##  Features
+-  User authentication & token-based login
+-  Role-based access (Admin vs. User)
+-  Product management (CRUD)
+-  Search, filter & paginate products
+-  Admin-only user management
+-  Error handling & validation
+-  Deployment-ready (Heroku, Netlify, Vercel)
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ecommerce-project/
 │
@@ -148,7 +148,7 @@ Frontend:
 bash
 Copy code
 npm test
-📦 Deployment
+ Deployment
 Backend → Heroku / PythonAnywhere
 
 Frontend → Netlify / Vercel
