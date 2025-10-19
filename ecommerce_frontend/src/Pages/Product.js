@@ -1,53 +1,76 @@
-// src/pages/Products.js
-import React, { useEffect, useState } from "react";
-import API from "../api";
+const products = [
+  {
+    id: 1,
+    name: "Wireless Headphones",
+    description: "Noise-cancelling over-ear headphones with deep bass.",
+    price: 8500,
+    imageUrl: "https://i.pinimg.com/736x/4e/a5/c8/4ea5c8c480625906a692bafa65ba7aad.jpg",
+    category: "Electronics",
+    stock: 15,
+  },
+  {
+    id: 2,
+    name: "Smartphone",
+    description: "6.5-inch display, 128GB storage, 48MP camera.",
+    price: 30000,
+    imageUrl: "https://i.pinimg.com/736x/d9/82/12/d982123a83fe7a0f6c5ca92e5ea2d814.jpg",
+    category: "Electronics",
+    stock: 10,
+  },
+  {
+    id: 3,
+    name: "Bluetooth Speaker",
+    description: "Portable speaker with 12-hour battery life.",
+    price: 4200,
+    imageUrl: "https://i.pinimg.com/1200x/93/47/4c/93474c038a68e68232240136ceb2a51c.jpg",
+    category: "Electronics",
+    stock: 25,
+  },
+  {
+    id: 4,
+    name: "Gaming Mouse",
+    description: "RGB mouse with adjustable DPI and side buttons.",
+    price: 3500,
+    imageUrl: "https://i.pinimg.com/736x/a9/27/5b/a9275b6ec2fd104ab62ca03f65265a75.jpg",
+    category: "Accessories",
+    stock: 20,
+  },
+  {
+    id: 5,
+    name: "Laptop Backpack",
+    description: "Stylish backpack with laptop compartment and USB port.",
+    price: 5200,
+    imageUrl: "https://i.pinimg.com/736x/b6/88/85/b68885aae9b7ce7d9d39f46451be2ee9.jpg",
+    category: "Bags",
+    stock: 12,
+  },
+  {
+    id: 6,
+    name: "Smart Watch",
+    description: "Tracks heart rate, sleep, and steps with waterproof design.",
+    price: 9500,
+    imageUrl: "https://i.pinimg.com/736x/ef/bb/17/efbb17fc0cfc2be91f2c913c66676a5f.jpg",
+    category: "Wearables",
+    stock: 18,
+  },
+  {
+    id: 7,
+    name: "Wireless Keyboard",
+    description: "Slim and quiet keyboard with long battery life.",
+    price: 2800,
+    imageUrl: "https://i.pinimg.com/1200x/bd/bd/31/bdbd31155678cede77c7c89425778fb0.jpg",
+    category: "Accessories",
+    stock: 30,
+  },
+  {
+    id: 8,
+    name: "Power Bank",
+    description: "20000mAh fast-charging power bank with dual output.",
+    price: 4500,
+    imageUrl: "https://i.pinimg.com/736x/c0/94/8b/c0948b196034f9dc43a76da600a1073e.jpg ",
+    category: "Electronics",
+    stock: 50,
+  },
+];
 
-function Products() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await API.get("products/"); // GET /api/products/
-        setProducts(res.data);
-      } catch (err) {
-        console.error("Error fetching products", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
-
-  if (loading) return <p>Loading products...</p>;
-
-  return (
-    <div className="products">
-      <h1>Products</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-        {products.map((p) => (
-          <div
-            key={p.id}
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "1rem",
-              width: "200px",
-            }}
-          >
-            <h3>{p.name}</h3>
-            <p>{p.description}</p>
-            <p>
-              <strong>${p.price}</strong>
-            </p>
-            <p>Stock: {p.stock}</p>
-            <p>Category: {p.category}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default Products;
+export default products;
